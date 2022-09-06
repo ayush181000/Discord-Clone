@@ -8,6 +8,7 @@ import colors from 'colors';
 
 import { registerSocketServer } from './socketServer.js';
 import authRoutes from './routes/authRoutes.js';
+import friendInvitationRoutes from './routes/friendInvitationRoutes.js';
 
 dotenv.config();
 
@@ -24,6 +25,7 @@ app.use(cors());
 
 // rotues
 app.use('/api/auth', authRoutes);
+app.use('/api/friend-invitation', friendInvitationRoutes);
 
 const server = http.createServer(app);
 registerSocketServer(server);

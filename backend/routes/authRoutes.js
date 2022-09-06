@@ -1,7 +1,6 @@
 import express from 'express';
 const router = express.Router();
 import { login, register } from '../controllers/authControllers.js';
-import { protect } from '../middleware/authMiddleware.js';
 
 import Joi from 'joi';
 import expressJoi from 'express-joi-validation';
