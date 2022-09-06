@@ -1,4 +1,7 @@
 import { Server } from 'socket.io';
+import { verifyTokenSocket } from './middleware/authSocket.js';
+import disconnectHandler from './socketHandlers/disconnectHandler.js';
+import newConnectionHandler from './socketHandlers/newConnectionHandler.js';
 
 export const registerSocketServer = (server) => {
   const io = new Server(server, {
@@ -8,8 +11,15 @@ export const registerSocketServer = (server) => {
     },
   });
 
+  io.use((socket, next) => {
+    verifyTokenSocket(socket, next);
+  });
+
   io.on('connection', (socket) => {
-    console.log('user connected');
-    console.log(socket.id);
+    newConnectionHandler(socket, io);
+
+    socket.on('disconnect', () => {
+      disconnectHandler(socket);
+    });
   });
 };
