@@ -1,12 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import {
-  Dialog,
-  DialogActions,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  Typography,
-} from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import Typography from '@mui/material/Typography';
 import { validateMail } from '../../shared/utils/validators';
 import InputWithLabel from '../../shared/components/InputWithLabel';
 import CustomPrimaryButton from '../../shared/components/CustomPrimaryButton';
@@ -19,11 +17,11 @@ const AddFriendDialog = ({
   const [mail, setMail] = useState('');
   const [isFormValid, setIsFormValid] = useState('');
 
-  const handleSendInvitation = (invitation) => {
-    // TODO:send friend request to server
+  const handleSendInvitation = () => {
+    // send friend request to server
   };
 
-  const hadnleCloseDialog = () => {
+  const handleCloseDialog = () => {
     closeDialogHandler();
     setMail('');
   };
@@ -31,24 +29,25 @@ const AddFriendDialog = ({
   useEffect(() => {
     setIsFormValid(validateMail(mail));
   }, [mail, setIsFormValid]);
+
   return (
     <div>
-      <Dialog open={isDialogOpen} onClose={hadnleCloseDialog}>
+      <Dialog open={isDialogOpen} onClose={handleCloseDialog}>
         <DialogTitle>
           <Typography>Invite a Friend</Typography>
         </DialogTitle>
         <DialogContent>
           <DialogContentText>
-            <Typography component={'span'}>
+            <Typography>
               Enter e-mail address of friend which you would like to invite
             </Typography>
           </DialogContentText>
           <InputWithLabel
-            label='mail'
+            label='Mail'
             type='text'
             value={mail}
             setValue={setMail}
-            placeholder='Enter a e-mail address'
+            placeholder='Enter mail address'
           />
         </DialogContent>
         <DialogActions>

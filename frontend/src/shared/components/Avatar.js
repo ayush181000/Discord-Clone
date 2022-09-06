@@ -1,5 +1,5 @@
-import { styled } from '@mui/system';
 import React from 'react';
+import { styled } from '@mui/system';
 
 const AvatarPreview = styled('div')({
   height: '42px',

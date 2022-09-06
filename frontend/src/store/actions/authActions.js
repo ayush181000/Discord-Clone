@@ -10,6 +10,7 @@ export const getActions = (dispatch) => {
     login: (userDetails, history) => dispatch(login(userDetails, history)),
     register: (userDetails, history) =>
       dispatch(register(userDetails, history)),
+    setUserDetails: (userDetails) => dispatch(setUserDetails(userDetails)),
   };
 };
 
@@ -23,7 +24,7 @@ const setUserDetails = (userDetails) => {
 const login = (userDetails, history) => {
   return async (dispatch) => {
     const response = await api.login(userDetails);
-
+    console.log(response);
     if (response.error) {
       dispatch(openAlertMessage(response?.exception?.response?.data));
     } else {
@@ -31,7 +32,7 @@ const login = (userDetails, history) => {
       localStorage.setItem('user', JSON.stringify(userDetails));
 
       dispatch(setUserDetails(userDetails));
-      history('/dashboard', { replace: true });
+      history.push('/dashboard');
     }
   };
 };
@@ -39,7 +40,7 @@ const login = (userDetails, history) => {
 const register = (userDetails, history) => {
   return async (dispatch) => {
     const response = await api.register(userDetails);
-
+    console.log(response);
     if (response.error) {
       dispatch(openAlertMessage(response?.exception?.response?.data));
     } else {
@@ -47,7 +48,7 @@ const register = (userDetails, history) => {
       localStorage.setItem('user', JSON.stringify(userDetails));
 
       dispatch(setUserDetails(userDetails));
-      history('/dashboard', { replace: true });
+      history.push('/dashboard');
     }
   };
 };

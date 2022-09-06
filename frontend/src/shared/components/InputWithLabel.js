@@ -16,7 +16,7 @@ const Label = styled('p')({
 });
 
 const Input = styled('input')({
-  flexGrow: '1',
+  flexGrow: 1,
   height: '40px',
   border: '1px solid black',
   borderRadius: '5px',
@@ -30,18 +30,19 @@ const Input = styled('input')({
 const InputWithLabel = (props) => {
   const { value, setValue, label, type, placeholder } = props;
 
-  const handleValueChange = (e) => {
-    setValue(e.target.value);
+  const handleValueChange = (event) => {
+    setValue(event.target.value);
   };
+
   return (
     <Wrapper>
       <Label>{label}</Label>
       <Input
         value={value}
+        onChange={handleValueChange}
         type={type}
         placeholder={placeholder}
-        onChange={handleValueChange}
-      ></Input>
+      />
     </Wrapper>
   );
 };

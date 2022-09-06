@@ -3,13 +3,13 @@ import { styled } from '@mui/system';
 
 const MainContainer = styled('div')({
   flexGrow: 1,
-  display: 'flex',
   backgroundColor: '#36393f',
   marginTop: '48px',
+  display: 'flex',
 });
 
 const Messenger = () => {
-  return <MainContainer>Messenger</MainContainer>;
+  return <MainContainer></MainContainer>;
 };
 
 export default Messenger;

@@ -1,9 +1,9 @@
 import React from 'react';
-import { Button } from '@mui/material';
+import Button from '@mui/material/Button';
 
 const CustomPrimaryButton = ({
   label,
-  additionalSytles,
+  additionalStyles,
   disabled,
   onClick,
 }) => {
@@ -19,7 +19,7 @@ const CustomPrimaryButton = ({
         width: '100%',
         height: '40px',
       }}
-      style={additionalSytles ? additionalSytles : {}}
+      style={additionalStyles ? additionalStyles : {}}
       disabled={disabled}
       onClick={onClick}
     >

@@ -1,8 +1,8 @@
 import React from 'react';
 import { styled } from '@mui/system';
-import FriendsListItem from "./FriendsListItem";
+import FriendsListItem from './FriendsListItem';
 
-const DUMMY_FRIEND_LIST = [
+const DUMMY_FRIENDS = [
   {
     id: 1,
     username: 'Mark',
@@ -28,7 +28,7 @@ const MainContainer = styled('div')({
 const FriendsList = () => {
   return (
     <MainContainer>
-      {DUMMY_FRIEND_LIST.map((f) => (
+      {DUMMY_FRIENDS.map((f) => (
         <FriendsListItem
           username={f.username}
           id={f.id}

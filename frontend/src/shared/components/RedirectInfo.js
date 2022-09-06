@@ -1,6 +1,6 @@
+import React from 'react';
 import { Typography } from '@mui/material';
 import { styled } from '@mui/system';
-import React from 'react';
 
 const RedirectText = styled('span')({
   color: '#00AFF4',
@@ -21,7 +21,7 @@ const RedirectInfo = ({
       variant='subtitle2'
     >
       {text}
-      <RedirectText onClick={redirectHandler}> {redirectText}</RedirectText>
+      <RedirectText onClick={redirectHandler}>{redirectText}</RedirectText>
     </Typography>
   );
 };

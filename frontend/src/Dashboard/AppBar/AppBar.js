@@ -7,7 +7,7 @@ const MainContainer = styled('div')({
   right: '0',
   top: '0',
   height: '48px',
-  borderBotoom: '1px solid black',
+  borderBottom: '1px solid black',
   backgroundColor: '#36393f',
   width: 'calc(100% - 326px)',
   display: 'flex',

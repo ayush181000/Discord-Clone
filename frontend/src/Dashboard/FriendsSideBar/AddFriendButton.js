@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-
 import CustomPrimaryButton from '../../shared/components/CustomPrimaryButton';
 import AddFriendDialog from './AddFriendDialog';
 
@@ -21,10 +20,11 @@ const AddFriendButton = () => {
   const handleCloseAddFriendDialog = () => {
     setIsDialogOpen(false);
   };
+
   return (
     <>
       <CustomPrimaryButton
-        additionalSytles={additionalStyles}
+        additionalStyles={additionalStyles}
         label='Add Friend'
         onClick={handleOpenAddFriendDialog}
       />

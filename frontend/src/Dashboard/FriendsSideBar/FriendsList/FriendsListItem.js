@@ -1,6 +1,7 @@
 import React from 'react';
-import { Button, Typography } from '@mui/material';
+import Button from '@mui/material/Button';
 import Avatar from '../../../shared/components/Avatar';
+import Typography from '@mui/material/Typography';
 import OnlineIndicator from './OnlineIndicator';
 
 const FriendsListItem = ({ id, username, isOnline }) => {
@@ -10,7 +11,7 @@ const FriendsListItem = ({ id, username, isOnline }) => {
         width: '100%',
         height: '42px',
         marginTop: '10px',
-        dislay: 'flex',
+        display: 'flex',
         alignItems: 'center',
         justifyContent: 'flex-start',
         textTransform: 'none',
