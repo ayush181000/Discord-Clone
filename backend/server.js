@@ -1,10 +1,12 @@
 import express from 'express';
 import cors from 'cors';
+import http from 'http';
 import connectDB from './config/db.js';
 import dotenv from 'dotenv';
 import morgan from 'morgan';
 import colors from 'colors';
 
+import { registerSocketServer } from './socketServer.js';
 import authRoutes from './routes/authRoutes.js';
 
 dotenv.config();
@@ -23,7 +25,11 @@ app.use(cors());
 // rotues
 app.use('/api/auth', authRoutes);
 
+const server = http.createServer(app);
+registerSocketServer(server);
+
 const PORT = process.env.PORT || process.env.API_PORT;
-app.listen(PORT, () => {
+
+server.listen(PORT, () => {
   console.log(`Server is listening on ${PORT}`);
 });
