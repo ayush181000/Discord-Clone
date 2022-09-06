@@ -11,7 +11,7 @@ import { validateMail } from '../../shared/utils/validators';
 import InputWithLabel from '../../shared/components/InputWithLabel';
 import CustomPrimaryButton from '../../shared/components/CustomPrimaryButton';
 
-const AddFreindDialog = ({
+const AddFriendDialog = ({
   isDialogOpen,
   closeDialogHandler,
   sendFriendInvitation = () => {},
@@ -39,7 +39,7 @@ const AddFreindDialog = ({
         </DialogTitle>
         <DialogContent>
           <DialogContentText>
-            <Typography>
+            <Typography component={'span'}>
               Enter e-mail address of friend which you would like to invite
             </Typography>
           </DialogContentText>
@@ -68,4 +68,4 @@ const AddFreindDialog = ({
   );
 };
 
-export default AddFreindDialog;
+export default AddFriendDialog;
