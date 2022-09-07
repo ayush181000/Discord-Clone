@@ -1,5 +1,6 @@
 import User from '../models/User.js';
 import FriendInvitation from '../models/FriendInvitation.js';
+import { updateFriendsPendingInvitations } from '../socketHandlers/updates/friends.js';
 
 const postInvite = async (req, res) => {
   try {
@@ -46,6 +47,9 @@ const postInvite = async (req, res) => {
     });
 
     // if invitation has been successfully created we would like to upodate friends invitation if he is online
+
+    // send pending invitations update to specefic user
+    updateFriendsPendingInvitations(targetUser._id.toString());
 
     // send response
     return res.status(201).send('Invitation Sent');
