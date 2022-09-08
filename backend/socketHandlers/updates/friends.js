@@ -26,4 +26,38 @@ const updateFriendsPendingInvitations = async (userId) => {
   }
 };
 
-export { updateFriendsPendingInvitations };
+const updateFriends = async (userId) => {
+  try {
+    // find active connections of specefic id
+    const receiverList = getActiveConnections(userId);
+    if (receiverList.length > 0) {
+      const user = await User.findById(userId, { id: 1, friends: 1 }).populate(
+        'friends',
+        '_id username mail'
+      );
+
+      if (user) {
+        const friendsList = user.friends.map((f) => {
+          return {
+            id: f._id,
+            mail: f.mail,
+            username: f.username,
+          };
+        });
+
+        // get io instance
+        const io = getSocketServerInstance();
+
+        receiverList.forEach((receiverSocketId) => {
+          io.to(receiverSocketId).emit('friends-list', {
+            friendsList: friendsList ? friendsList : [],
+          });
+        });
+      }
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export { updateFriendsPendingInvitations, updateFriends };

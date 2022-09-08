@@ -1,6 +1,10 @@
 import User from '../models/User.js';
 import FriendInvitation from '../models/FriendInvitation.js';
-import { updateFriendsPendingInvitations } from '../socketHandlers/updates/friends.js';
+import {
+  updateFriends,
+  updateFriendsPendingInvitations,
+} from '../socketHandlers/updates/friends.js';
+import { response } from 'express';
 
 const postInvite = async (req, res) => {
   try {
@@ -59,11 +63,63 @@ const postInvite = async (req, res) => {
 };
 
 const postAccept = async (req, res) => {
-  return res.send('accept handler');
+  try {
+    const { id } = req.body;
+
+    const invitation = await FriendInvitation.findById(id);
+
+    if (!invitation)
+      return res.status(404).send('Error occured. Please try again');
+
+    const { senderId, receiverId } = invitation;
+
+    // add friends to both users
+    const senderUser = await User.findById(senderId);
+    senderUser.friends = [...senderUser.friends, receiverId];
+
+    const receiverUser = await User.findById(receiverId);
+    receiverUser.friends = [...receiverUser.friends, senderId];
+
+    await senderUser.save();
+    await receiverUser.save();
+
+    // delete invitation
+    await FriendInvitation.findByIdAndDelete(id);
+
+    //update list of freinds  if user are online
+    updateFriends(senderId.toString());
+    updateFriends(receiverId.toString());
+
+    // update list of friends pending invitations
+    updateFriendsPendingInvitations(req.user.userId);
+
+    return res.status(200).send('Friend successfully added');
+  } catch (err) {
+    console.log(err);
+    return res.status(500).send('Something went wrong. Please try again');
+  }
 };
 
 const postReject = async (req, res) => {
-  return res.send('reject handler');
+  try {
+    const { id } = req.body;
+    const { userId } = req.user;
+
+    // remove that invitation from friend invitation collection
+    const invitationExists = await FriendInvitation.exists({ _id: id });
+
+    if (invitationExists) {
+      await FriendInvitation.findByIdAndDelete(id);
+    }
+
+    // update pending invitatins
+    updateFriendsPendingInvitations(userId);
+
+    return res.status(200).send('Invitation successfully rejected!');
+  } catch (err) {
+    console.log(err);
+    return res.status(500).send('Something must went wrong. Try Again!');
+  }
 };
 
 export { postInvite, postAccept, postReject };
