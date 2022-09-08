@@ -57,4 +57,13 @@ const postInvite = async (req, res) => {
     return res.status(500).send('Error occured. Please try again');
   }
 };
-export { postInvite };
+
+const postAccept = async (req, res) => {
+  return res.send('accept handler');
+};
+
+const postReject = async (req, res) => {
+  return res.send('reject handler');
+};
+
+export { postInvite, postAccept, postReject };

@@ -21,7 +21,11 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: '*',
+  })
+);
 
 // rotues
 app.use('/api/auth', authRoutes);
