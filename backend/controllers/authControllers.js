@@ -17,6 +17,7 @@ const login = async (req, res) => {
           mail: user.mail,
           token,
           username: user.username,
+          _id: user._id,
         },
       });
     }
@@ -54,6 +55,7 @@ const register = async (req, res) => {
         mail: user.mail,
         token,
         username: user.username,
+        _id: user._id,
       },
     });
   } catch (error) {
