@@ -28,6 +28,9 @@ app.use(
 );
 
 // rotues
+app.get('/', (req, res) => {
+  res.send('Server started successfully');
+});
 app.use('/api/auth', authRoutes);
 app.use('/api/friend-invitation', friendInvitationRoutes);
 
