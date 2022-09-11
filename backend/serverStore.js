@@ -1,8 +1,7 @@
 import { v4 as uuid } from 'uuid';
 
 const connectedUsers = new Map();
-const activeRooms = [];
-
+let activeRooms = [];
 let io = null;
 
 const setSocketServerInstance = (IoInstance) => {
@@ -61,11 +60,16 @@ const addNewActiveRoom = (userId, socketId) => {
     roomId: uuid(),
   };
 
-  activeRooms.push(newActiveRoom);
+  activeRooms = [...activeRooms, newActiveRoom];
   console.log('new active rooms');
   console.log(activeRooms);
   return newActiveRoom;
 };
+
+const getActiveRooms = () => {
+  return [...activeRooms];
+};
+
 export {
   setSocketServerInstance,
   getSocketServerInstance,
@@ -74,4 +78,5 @@ export {
   getActiveConnections,
   getOnlineUsers,
   addNewActiveRoom,
+  getActiveRooms,
 };
