@@ -12,6 +12,12 @@ let socket = null;
 export const connectWithSocketServer = (userDetails) => {
   const jwtToken = userDetails.token;
 
+  // socket = io('https://discord-clone-v2-backend.herokuapp.com/', {
+  //   auth: {
+  //     token: jwtToken,
+  //   },
+  // });
+
   socket = io('http://localhost:5002', {
     auth: {
       token: jwtToken,
