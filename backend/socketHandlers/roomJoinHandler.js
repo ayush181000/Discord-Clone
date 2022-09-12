@@ -3,7 +3,6 @@ import { updateRooms } from './updates/rooms.js';
 
 const roomJoinHandler = (socket, data) => {
   const { roomId } = data;
-  console.log(roomId);
 
   const participantDetails = {
     userId: socket.user.userId,
@@ -13,6 +12,15 @@ const roomJoinHandler = (socket, data) => {
   const roomDetails = getActiveRoom(roomId);
 
   joinActiveRoom(roomId, participantDetails);
+
+  // send information to users in room that they should prepare for incoming connection
+  roomDetails.participants.forEach((participant) => {
+    if (participant.socketId !== participantDetails.socketId) {
+      socket.to(participant.socketId).emit('conn-prepare', {
+        connUserSocketId: participantDetails.socketId,
+      });
+    }
+  });
 
   updateRooms();
 };
