@@ -5,10 +5,15 @@ import {
   setRoomDetails,
 } from '../store/actions/roomActions';
 import { createRoom, joinARoom, leaveARoom } from './socketConnection';
+import * as webRTCHandler from './webRTCHandler';
 
 export const createNewRoom = () => {
-  store.dispatch(setOpenRoom(true, true));
-  createRoom();
+  const successCallbackFunc = () => {
+    store.dispatch(setOpenRoom(true, true));
+    createRoom();
+  };
+
+  webRTCHandler.getLocalStreamPreview(false, successCallbackFunc);
 };
 
 export const newRoomCreated = (data) => {

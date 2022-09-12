@@ -3,6 +3,7 @@ import {
   updateFriendsPendingInvitations,
   updateFriends,
 } from './updates/friends.js';
+import { updateRooms } from './updates/rooms.js';
 
 const newConnectionHandler = async (socket, io) => {
   const userDetails = socket.user;
@@ -14,6 +15,11 @@ const newConnectionHandler = async (socket, io) => {
 
   // update friends list
   updateFriends(userDetails.userId);
+
+  // update rooms
+  setTimeout(() => {
+    updateRooms(socket.id);
+  }, [500]);
 };
 
 export default newConnectionHandler;
