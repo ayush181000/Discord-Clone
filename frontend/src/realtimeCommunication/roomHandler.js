@@ -13,7 +13,8 @@ export const createNewRoom = () => {
     createRoom();
   };
 
-  webRTCHandler.getLocalStreamPreview(false, successCallbackFunc);
+  const audioOnly = store.getState().room.audioOnly;
+  webRTCHandler.getLocalStreamPreview(audioOnly, successCallbackFunc);
 };
 
 export const newRoomCreated = (data) => {
@@ -38,9 +39,14 @@ export const updateActiveRooms = (data) => {
 };
 
 export const joinRoom = (roomId) => {
-  store.dispatch(setRoomDetails({ roomId }));
-  store.dispatch(setOpenRoom(false, true));
-  joinARoom(roomId);
+  const successCallbackFunc = () => {
+    store.dispatch(setRoomDetails({ roomId }));
+    store.dispatch(setOpenRoom(false, true));
+    joinARoom(roomId);
+  };
+
+  const audioOnly = store.getState().room.audioOnly;
+  webRTCHandler.getLocalStreamPreview(audioOnly, successCallbackFunc);
 };
 
 export const leaveRoom = () => {

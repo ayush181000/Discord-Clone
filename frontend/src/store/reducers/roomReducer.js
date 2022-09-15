@@ -42,6 +42,13 @@ const reducer = (state = initState, action) => {
       };
     }
 
+    case roomActions.SET_AUDIO_ONLY: {
+      return {
+        ...state,
+        audioOnly: action.audioOnly,
+      };
+    }
+
     default:
       return state;
   }
