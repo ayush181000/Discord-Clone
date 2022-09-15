@@ -5,6 +5,7 @@ export const roomActions = {
   SET_LOCAL_STREAM: 'ROOM.SET_LOCAL_STREAM',
   SET_AUDIO_ONLY: 'ROOM.SET_AUDIO_ONLY',
   SET_SCREEN_SHARE_STREAM: 'ROOM.SET_SCREEN_SHARE_STREAM',
+  SET_REMOTE_STREAMS: 'ROOM.SET_REMOTE_STREAMS',
 };
 
 export const getActions = (dispatch) => {
@@ -51,5 +52,12 @@ export const setAudioOnly = (audioOnly) => {
   return {
     type: roomActions.SET_AUDIO_ONLY,
     audioOnly,
+  };
+};
+
+export const setRemoteStreams = (remoteStreams) => {
+  return {
+    type: roomActions.SET_REMOTE_STREAMS,
+    remoteStreams,
   };
 };
