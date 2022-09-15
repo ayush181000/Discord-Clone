@@ -8,6 +8,8 @@ import directChatHistoryHandler from './socketHandlers/directChatHistoryHandler.
 import roomCreateHandler from './socketHandlers/roomCreateHandler.js';
 import roomJoinHandler from './socketHandlers/roomJoinHandler.js';
 import roomLeaveHandler from './socketHandlers/roomLeaveHandler.js';
+import roomInitializeConnectionHandler from './socketHandlers/roomInitializeConnectionHandler.js';
+import roomSignalingDataHandler from './socketHandlers/roomSignalingDataHandler.js';
 
 export const registerSocketServer = (server) => {
   const io = new Server(server, {
@@ -50,6 +52,14 @@ export const registerSocketServer = (server) => {
 
     socket.on('room-leave', (data) => {
       roomLeaveHandler(socket, data);
+    });
+
+    socket.on('conn-init', (data) => {
+      roomInitializeConnectionHandler(socket, data);
+    });
+
+    socket.on('conn-signal', (data) => {
+      roomSignalingDataHandler(socket, data);
     });
 
     socket.on('disconnect', () => {
