@@ -1,5 +1,8 @@
 export const validateLoginForm = ({ mail, password }) => {
-  return validateMail(mail) && validatePassword(password);
+  const isMailValid = validateMail(mail);
+  const isPasswordValid = validatePassword(password);
+
+  return isMailValid && isPasswordValid;
 };
 
 export const validateRegisterForm = ({ mail, password, username }) => {

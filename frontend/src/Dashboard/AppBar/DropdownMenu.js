@@ -1,5 +1,4 @@
 import * as React from 'react';
-
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { IconButton } from '@mui/material';
@@ -52,10 +51,10 @@ const mapStoreStateToProps = ({ room }) => {
   };
 };
 
-const mapActionToProps = (dispatch) => {
+const mapActionsToProps = (dispatch) => {
   return {
     ...getActions(dispatch),
   };
 };
 
-export default connect(mapStoreStateToProps, mapActionToProps)(BasicMenu);
+export default connect(mapStoreStateToProps, mapActionsToProps)(BasicMenu);

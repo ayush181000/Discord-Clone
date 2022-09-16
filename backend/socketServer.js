@@ -1,38 +1,38 @@
-import { Server } from 'socket.io';
-import { verifyTokenSocket } from './middleware/authSocket.js';
-import { getOnlineUsers, setSocketServerInstance } from './serverStore.js';
-import disconnectHandler from './socketHandlers/disconnectHandler.js';
-import newConnectionHandler from './socketHandlers/newConnectionHandler.js';
-import directMessageHandler from './socketHandlers/directMessageHandler.js';
-import directChatHistoryHandler from './socketHandlers/directChatHistoryHandler.js';
-import roomCreateHandler from './socketHandlers/roomCreateHandler.js';
-import roomJoinHandler from './socketHandlers/roomJoinHandler.js';
-import roomLeaveHandler from './socketHandlers/roomLeaveHandler.js';
-import roomInitializeConnectionHandler from './socketHandlers/roomInitializeConnectionHandler.js';
-import roomSignalingDataHandler from './socketHandlers/roomSignalingDataHandler.js';
+const authSocket = require('./middleware/authSocket');
+const newConnectionHandler = require('./socketHandlers/newConnectionHandler');
+const disconnectHandler = require('./socketHandlers/disconnectHandler');
+const directMessageHandler = require('./socketHandlers/directMessageHandler');
+const directChatHistoryHandler = require('./socketHandlers/directChatHistoryHandler');
+const roomCreateHandler = require('./socketHandlers/roomCreateHandler');
+const roomJoinHandler = require('./socketHandlers/roomJoinHandler');
+const roomLeaveHandler = require('./socketHandlers/roomLeaveHandler');
+const roomInitializeConnectionHandler = require('./socketHandlers/roomInitializeConnectionHandler');
+const roomSignalingDataHandler = require('./socketHandlers/roomSignalingDataHandler');
 
-export const registerSocketServer = (server) => {
-  const io = new Server(server, {
+const serverStore = require('./serverStore');
+
+const registerSocketServer = (server) => {
+  const io = require('socket.io')(server, {
     cors: {
       origin: '*',
       methods: ['GET', 'POST'],
     },
   });
 
-  setSocketServerInstance(io);
+  serverStore.setSocketServerInstance(io);
 
   io.use((socket, next) => {
-    verifyTokenSocket(socket, next);
+    authSocket(socket, next);
   });
 
-  const emitOnlineUser = () => {
-    const onlineUsers = getOnlineUsers();
+  const emitOnlineUsers = () => {
+    const onlineUsers = serverStore.getOnlineUsers();
     io.emit('online-users', { onlineUsers });
   };
 
   io.on('connection', (socket) => {
     newConnectionHandler(socket, io);
-    emitOnlineUser();
+    emitOnlineUsers();
 
     socket.on('direct-message', (data) => {
       directMessageHandler(socket, data);
@@ -68,6 +68,10 @@ export const registerSocketServer = (server) => {
   });
 
   setInterval(() => {
-    emitOnlineUser();
+    emitOnlineUsers();
   }, [1000 * 8]);
+};
+
+module.exports = {
+  registerSocketServer,
 };

@@ -1,5 +1,6 @@
 import React from 'react';
-import { Alert, Snackbar } from '@mui/material';
+import Alert from '@mui/material/Alert';
+import Snackbar from '@mui/material/Snackbar';
 import { connect } from 'react-redux';
 import { getActions } from '../../store/actions/alertActions';
 

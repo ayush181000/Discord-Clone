@@ -1,9 +1,9 @@
 import React from 'react';
 import { styled } from '@mui/system';
-import { connect } from 'react-redux';
 import MessagesHeader from './MessagesHeader';
+import { connect } from 'react-redux';
 import Message from './Message';
-import DateSeperator from './DateSeperator';
+import DateSeparator from './DateSeparator';
 
 const MainContainer = styled('div')({
   height: 'calc(100% - 60px)',
@@ -21,7 +21,7 @@ const convertDateToHumanReadable = (date, format) => {
     yyyy: date.getFullYear(),
   };
 
-  return format.replace(/mm|dd|yy|yyyy/gi, (matched) => map[matched]);
+  return format.replace(/mm|dd|yy|yyy/gi, (matched) => map[matched]);
 };
 
 const Messages = ({ chosenChatDetails, messages }) => {
@@ -40,10 +40,11 @@ const Messages = ({ chosenChatDetails, messages }) => {
               new Date(messages[index - 1].date),
               'dd/mm/yy'
             );
+
         return (
           <div key={message._id} style={{ width: '97%' }}>
             {(!sameDay || index === 0) && (
-              <DateSeperator
+              <DateSeparator
                 date={convertDateToHumanReadable(
                   new Date(message.date),
                   'dd/mm/yy'
@@ -51,9 +52,8 @@ const Messages = ({ chosenChatDetails, messages }) => {
               />
             )}
             <Message
-              key={message._id}
               content={message.content}
-              username={message.author?.username}
+              username={message.author.username}
               sameAuthor={sameAuthor}
               date={convertDateToHumanReadable(
                 new Date(message.date),
@@ -69,7 +69,9 @@ const Messages = ({ chosenChatDetails, messages }) => {
 };
 
 const mapStoreStateToProps = ({ chat }) => {
-  return { ...chat };
+  return {
+    ...chat,
+  };
 };
 
 export default connect(mapStoreStateToProps)(Messages);

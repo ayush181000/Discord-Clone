@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import {
-  Dialog,
-  DialogTitle,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  Typography,
-} from '@mui/material';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import Typography from '@mui/material/Typography';
 import { validateMail } from '../../shared/utils/validators';
 import InputWithLabel from '../../shared/components/InputWithLabel';
 import CustomPrimaryButton from '../../shared/components/CustomPrimaryButton';
@@ -22,7 +20,12 @@ const AddFriendDialog = ({
   const [isFormValid, setIsFormValid] = useState('');
 
   const handleSendInvitation = () => {
-    sendFriendInvitation({ targetMailAddress: mail }, handleCloseDialog);
+    sendFriendInvitation(
+      {
+        targetMailAddress: mail,
+      },
+      handleCloseDialog
+    );
   };
 
   const handleCloseDialog = () => {
@@ -42,9 +45,9 @@ const AddFriendDialog = ({
         </DialogTitle>
         <DialogContent>
           <DialogContentText>
-            {/* <Typography> */}
-            Enter e-mail address of friend which you would like to invite
-            {/* </Typography> */}
+            <Typography>
+              Enter e-mail address of friend which you would like to invite
+            </Typography>
           </DialogContentText>
           <InputWithLabel
             label='Mail'

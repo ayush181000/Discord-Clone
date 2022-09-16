@@ -1,16 +1,16 @@
 import React from 'react';
-import { IconButton } from '@mui/material';
-import { Close } from '@mui/icons-material';
-import { leaveRoom } from '../../../realtimeCommunication/roomHandler';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
+import * as roomHandler from '../../../realtimeCommunication/roomHandler';
 
 const CloseRoomButton = () => {
   const handleLeaveRoom = () => {
-    leaveRoom();
+    roomHandler.leaveRoom();
   };
 
   return (
     <IconButton onClick={handleLeaveRoom} style={{ color: 'white' }}>
-      <Close />
+      <CloseIcon />
     </IconButton>
   );
 };

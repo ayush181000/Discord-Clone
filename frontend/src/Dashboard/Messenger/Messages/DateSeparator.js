@@ -1,7 +1,7 @@
 import React from 'react';
 import { styled } from '@mui/system';
 
-const Seperator = styled('div')({
+const Separator = styled('div')({
   width: '95%',
   backgroundColor: '#b9bbbe',
   height: '1px',
@@ -20,12 +20,12 @@ const DateLabel = styled('span')({
   fontSize: '14px',
 });
 
-const DateSeperator = ({ date }) => {
+const DateSeparator = ({ date }) => {
   return (
-    <Seperator>
+    <Separator>
       <DateLabel>{date}</DateLabel>
-    </Seperator>
+    </Separator>
   );
 };
 
-export default DateSeperator;
+export default DateSeparator;

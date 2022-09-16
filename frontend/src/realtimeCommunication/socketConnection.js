@@ -1,14 +1,12 @@
 import io from 'socket.io-client';
-import store from '../store/store';
-
 import {
   setPendingFriendsInvitations,
   setFriends,
   setOnlineUsers,
 } from '../store/actions/friendsActions';
-
+import store from '../store/store';
 import { updateDirectChatHistoryIfActive } from '../shared/utils/chat';
-import { newRoomCreated, updateActiveRooms } from './roomHandler';
+import * as roomHandler from './roomHandler';
 import * as webRTCHandler from './webRTCHandler';
 
 let socket = null;
@@ -16,21 +14,21 @@ let socket = null;
 export const connectWithSocketServer = (userDetails) => {
   const jwtToken = userDetails.token;
 
-  // socket = io('https://discord-clone-v2-backend.herokuapp.com/', {
+  // socket = io('http://localhost:5002', {
   //   auth: {
   //     token: jwtToken,
   //   },
   // });
 
-  socket = io('http://localhost:5002', {
+  socket = io('https://discord-backend.onrender.com/', {
     auth: {
       token: jwtToken,
     },
   });
 
   socket.on('connect', () => {
-    // console.log('successfully connected with socket.io server');
-    // console.log(socket.id);
+    console.log('succesfully connected with socket.io server');
+    console.log(socket.id);
   });
 
   socket.on('friends-invitations', (data) => {
@@ -39,8 +37,8 @@ export const connectWithSocketServer = (userDetails) => {
   });
 
   socket.on('friends-list', (data) => {
-    const { friendsList } = data;
-    store.dispatch(setFriends(friendsList));
+    const { friends } = data;
+    store.dispatch(setFriends(friends));
   });
 
   socket.on('online-users', (data) => {
@@ -49,22 +47,22 @@ export const connectWithSocketServer = (userDetails) => {
   });
 
   socket.on('direct-chat-history', (data) => {
+    console.log(data);
     updateDirectChatHistoryIfActive(data);
   });
 
   socket.on('room-create', (data) => {
-    newRoomCreated(data);
+    roomHandler.newRoomCreated(data);
   });
 
   socket.on('active-rooms', (data) => {
-    updateActiveRooms(data);
+    roomHandler.updateActiveRooms(data);
   });
 
   socket.on('conn-prepare', (data) => {
-    console.log('prepare for connection');
     const { connUserSocketId } = data;
     webRTCHandler.prepareNewPeerConnection(connUserSocketId, false);
-    socket.emit('conn-init', { connUserSocketId });
+    socket.emit('conn-init', { connUserSocketId: connUserSocketId });
   });
 
   socket.on('conn-init', (data) => {
@@ -75,9 +73,15 @@ export const connectWithSocketServer = (userDetails) => {
   socket.on('conn-signal', (data) => {
     webRTCHandler.handleSignalingData(data);
   });
+
+  socket.on('room-participant-left', (data) => {
+    console.log('user left room');
+    webRTCHandler.handleParticipantLeftRoom(data);
+  });
 };
 
 export const sendDirectMessage = (data) => {
+  console.log(data);
   socket.emit('direct-message', data);
 };
 
@@ -85,15 +89,15 @@ export const getDirectChatHistory = (data) => {
   socket.emit('direct-chat-history', data);
 };
 
-export const createRoom = () => {
+export const createNewRoom = () => {
   socket.emit('room-create');
 };
 
-export const joinARoom = (data) => {
+export const joinRoom = (data) => {
   socket.emit('room-join', data);
 };
 
-export const leaveARoom = (data) => {
+export const leaveRoom = (data) => {
   socket.emit('room-leave', data);
 };
 

@@ -1,24 +1,26 @@
-import { getActiveRoom, leaveActiveRoom } from '../serverStore.js';
-import { updateRooms } from './updates/rooms.js';
+const serverStore = require("../serverStore");
+const roomsUpdate = require("./updates/rooms");
 
 const roomLeaveHandler = (socket, data) => {
   const { roomId } = data;
-  const activeRoom = getActiveRoom(roomId);
+
+  const activeRoom = serverStore.getActiveRoom(roomId);
 
   if (activeRoom) {
-    leaveActiveRoom(roomId, socket.id);
-    const updatedActiveRoom = getActiveRoom(roomId);
+    serverStore.leaveActiveRoom(roomId, socket.id);
+
+    const updatedActiveRoom = serverStore.getActiveRoom(roomId);
 
     if (updatedActiveRoom) {
       updatedActiveRoom.participants.forEach((participant) => {
-        socket.to(participant.socketId).emit('room-participant-left', {
+        socket.to(participant.socketId).emit("room-participant-left", {
           connUserSocketId: socket.id,
         });
       });
     }
 
-    updateRooms();
+    roomsUpdate.updateRooms();
   }
 };
 
-export default roomLeaveHandler;
+module.exports = roomLeaveHandler;

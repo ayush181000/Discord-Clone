@@ -10,8 +10,11 @@ const Wrapper = styled('div')({
 
 const MessengerContent = ({ chosenChatDetails }) => {
   useEffect(() => {
-    getDirectChatHistory({ receiverUserId: chosenChatDetails.id });
+    getDirectChatHistory({
+      receiverUserId: chosenChatDetails.id,
+    });
   }, [chosenChatDetails]);
+
   return (
     <Wrapper>
       <Messages />

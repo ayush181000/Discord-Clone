@@ -1,33 +1,22 @@
-import express from 'express';
-import cors from 'cors';
-import http from 'http';
-import connectDB from './config/db.js';
-import dotenv from 'dotenv';
-import morgan from 'morgan';
-import colors from 'colors';
+const express = require('express');
+const cors = require('cors');
+const http = require('http');
+const mongoose = require('mongoose');
+const morgan = require('morgan');
+require('dotenv').config();
 
-import { registerSocketServer } from './socketServer.js';
-import authRoutes from './routes/authRoutes.js';
-import friendInvitationRoutes from './routes/friendInvitationRoutes.js';
+const socketServer = require('./socketServer');
+const authRoutes = require('./routes/authRoutes');
+const friendInvitationRoutes = require('./routes/friendInvitationRoutes');
 
-dotenv.config();
-
-connectDB();
+const PORT = process.env.PORT || process.env.API_PORT;
 
 const app = express();
-
-if (process.env.NODE_ENV === 'development') {
-  app.use(morgan('dev'));
-}
-
+app.use(morgan('dev'));
 app.use(express.json());
-app.use(
-  cors({
-    origin: '*',
-  })
-);
+app.use(cors({ origin: '*' }));
 
-// rotues
+// routes
 app.get('/', (req, res) => {
   res.send('Server started successfully');
 });
@@ -35,10 +24,16 @@ app.use('/api/auth', authRoutes);
 app.use('/api/friend-invitation', friendInvitationRoutes);
 
 const server = http.createServer(app);
-registerSocketServer(server);
+socketServer.registerSocketServer(server);
 
-const PORT = process.env.PORT || process.env.API_PORT;
-
-server.listen(PORT, () => {
-  console.log(`Server is listening on ${PORT}`);
-});
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => {
+    server.listen(PORT, () => {
+      console.log(`Server is listening on ${PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.log('database connection failed. Server not started');
+    console.error(err);
+  });

@@ -1,5 +1,5 @@
-import { getActiveRoom, joinActiveRoom } from '../serverStore.js';
-import { updateRooms } from './updates/rooms.js';
+const serverStore = require("../serverStore");
+const roomsUpdates = require("./updates/rooms");
 
 const roomJoinHandler = (socket, data) => {
   const { roomId } = data;
@@ -9,20 +9,19 @@ const roomJoinHandler = (socket, data) => {
     socketId: socket.id,
   };
 
-  const roomDetails = getActiveRoom(roomId);
-
-  joinActiveRoom(roomId, participantDetails);
+  const roomDetails = serverStore.getActiveRoom(roomId);
+  serverStore.joinActiveRoom(roomId, participantDetails);
 
   // send information to users in room that they should prepare for incoming connection
   roomDetails.participants.forEach((participant) => {
     if (participant.socketId !== participantDetails.socketId) {
-      socket.to(participant.socketId).emit('conn-prepare', {
+      socket.to(participant.socketId).emit("conn-prepare", {
         connUserSocketId: participantDetails.socketId,
       });
     }
   });
 
-  updateRooms();
+  roomsUpdates.updateRooms();
 };
 
-export default roomJoinHandler;
+module.exports = roomJoinHandler;

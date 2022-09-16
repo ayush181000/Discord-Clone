@@ -1,8 +1,8 @@
-import { getActiveRooms, removeConnectedUser } from '../serverStore.js';
-import roomLeaveHandler from './roomLeaveHandler.js';
+const serverStore = require("../serverStore");
+const roomLeaveHandler = require("./roomLeaveHandler");
 
-const disconnectHandler = async (socket) => {
-  const activeRooms = getActiveRooms();
+const disconnectHandler = (socket) => {
+  const activeRooms = serverStore.getActiveRooms();
 
   activeRooms.forEach((activeRoom) => {
     const userInRoom = activeRoom.participants.some(
@@ -14,7 +14,7 @@ const disconnectHandler = async (socket) => {
     }
   });
 
-  removeConnectedUser(socket.id);
+  serverStore.removeConnectedUser(socket.id);
 };
 
-export default disconnectHandler;
+module.exports = disconnectHandler;

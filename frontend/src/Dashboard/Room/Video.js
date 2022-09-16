@@ -13,20 +13,21 @@ const VideoEl = styled('video')({
   height: '100%',
 });
 
-const Video = ({ stream, isLocalStrem }) => {
+const Video = ({ stream, isLocalStream }) => {
   const videoRef = useRef();
 
   useEffect(() => {
     const video = videoRef.current;
     video.srcObject = stream;
 
-    video.onloadmetadeta = () => {
+    video.onloadedmetadata = () => {
       video.play();
     };
   }, [stream]);
+
   return (
     <MainContainer>
-      <VideoEl ref={videoRef} autoPlay muted={isLocalStrem ? true : false} />
+      <VideoEl ref={videoRef} autoPlay muted={isLocalStream ? true : false} />
     </MainContainer>
   );
 };

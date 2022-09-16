@@ -1,23 +1,20 @@
-import User from '../../models/User.js';
-import FriendInvitation from '../../models/FriendInvitation.js';
-import {
-  getActiveConnections,
-  getSocketServerInstance,
-} from '../../serverStore.js';
+const User = require("../../models/user");
+const FriendInvitation = require("../../models/friendInvitation");
+const serverStore = require("../../serverStore");
 
 const updateFriendsPendingInvitations = async (userId) => {
   try {
     const pendingInvitations = await FriendInvitation.find({
       receiverId: userId,
-    }).populate('senderId', '_id username mail');
+    }).populate("senderId", "_id username mail");
 
-    // find if user of specified userId jas active connections
-    const receiverList = getActiveConnections(userId);
+    // find all active connections of specific userId
+    const receiverList = serverStore.getActiveConnections(userId);
 
-    const io = getSocketServerInstance();
+    const io = serverStore.getSocketServerInstance();
 
     receiverList.forEach((receiverSocketId) => {
-      io.to(receiverSocketId).emit('friends-invitations', {
+      io.to(receiverSocketId).emit("friends-invitations", {
         pendingInvitations: pendingInvitations ? pendingInvitations : [],
       });
     });
@@ -28,12 +25,13 @@ const updateFriendsPendingInvitations = async (userId) => {
 
 const updateFriends = async (userId) => {
   try {
-    // find active connections of specefic id
-    const receiverList = getActiveConnections(userId);
+    // find active connections of specific id (online users)
+    const receiverList = serverStore.getActiveConnections(userId);
+
     if (receiverList.length > 0) {
-      const user = await User.findById(userId, { id: 1, friends: 1 }).populate(
-        'friends',
-        '_id username mail'
+      const user = await User.findById(userId, { _id: 1, friends: 1 }).populate(
+        "friends",
+        "_id username mail"
       );
 
       if (user) {
@@ -45,12 +43,12 @@ const updateFriends = async (userId) => {
           };
         });
 
-        // get io instance
-        const io = getSocketServerInstance();
+        // get io server instance
+        const io = serverStore.getSocketServerInstance();
 
         receiverList.forEach((receiverSocketId) => {
-          io.to(receiverSocketId).emit('friends-list', {
-            friendsList: friendsList ? friendsList : [],
+          io.to(receiverSocketId).emit("friends-list", {
+            friends: friendsList ? friendsList : [],
           });
         });
       }
@@ -60,4 +58,7 @@ const updateFriends = async (userId) => {
   }
 };
 
-export { updateFriendsPendingInvitations, updateFriends };
+module.exports = {
+  updateFriendsPendingInvitations,
+  updateFriends,
+};

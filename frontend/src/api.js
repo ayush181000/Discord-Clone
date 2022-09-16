@@ -2,8 +2,8 @@ import axios from 'axios';
 import { logout } from './shared/utils/auth';
 
 const apiClient = axios.create({
-  baseURL: 'http://localhost:5002/api',
-  // baseURL: 'https://discord-clone-v2-backend.herokuapp.com/api',
+  // baseURL: 'http://localhost:5002/api',
+  baseURL: 'https://discord-backend.onrender.com/api',
   timeout: 3000,
 });
 
@@ -15,6 +15,7 @@ apiClient.interceptors.request.use(
       const token = JSON.parse(userDetails).token;
       config.headers.Authorization = `Bearer ${token}`;
     }
+
     return config;
   },
   (err) => {
@@ -22,7 +23,7 @@ apiClient.interceptors.request.use(
   }
 );
 
-// public route
+// public routes
 
 export const login = async (data) => {
   try {
@@ -47,7 +48,6 @@ export const register = async (data) => {
 };
 
 // secure routes
-
 export const sendFriendInvitation = async (data) => {
   try {
     return await apiClient.post('/friend-invitation/invite', data);

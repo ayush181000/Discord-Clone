@@ -1,11 +1,11 @@
-import { v4 as uuid } from 'uuid';
+const { v4: uuidv4 } = require('uuid');
 
 const connectedUsers = new Map();
 let activeRooms = [];
 let io = null;
 
-const setSocketServerInstance = (IoInstance) => {
-  io = IoInstance;
+const setSocketServerInstance = (ioInstance) => {
+  io = ioInstance;
 };
 
 const getSocketServerInstance = () => {
@@ -38,7 +38,7 @@ const getOnlineUsers = () => {
   const onlineUsers = [];
 
   connectedUsers.forEach((value, key) => {
-    onlineUsers.push({ socketId: key, user: value });
+    onlineUsers.push({ socketId: key, userId: value.userId });
   });
 
   return onlineUsers;
@@ -57,10 +57,11 @@ const addNewActiveRoom = (userId, socketId) => {
         socketId,
       },
     ],
-    roomId: uuid(),
+    roomId: uuidv4(),
   };
 
   activeRooms = [...activeRooms, newActiveRoom];
+
   return newActiveRoom;
 };
 
@@ -107,19 +108,18 @@ const leaveActiveRoom = (roomId, participantSocketId) => {
 
     activeRooms = activeRooms.filter((room) => room.roomId !== roomId);
 
-    console.log(copyOfActiveRoom.participants);
     if (copyOfActiveRoom.participants.length > 0) {
       activeRooms.push(copyOfActiveRoom);
     }
   }
 };
 
-export {
-  setSocketServerInstance,
-  getSocketServerInstance,
+module.exports = {
   addNewConnectedUser,
   removeConnectedUser,
   getActiveConnections,
+  setSocketServerInstance,
+  getSocketServerInstance,
   getOnlineUsers,
   addNewActiveRoom,
   getActiveRooms,

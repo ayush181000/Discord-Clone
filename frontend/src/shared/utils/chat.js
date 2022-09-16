@@ -1,36 +1,34 @@
 import store from '../../store/store';
 import { setMessages } from '../../store/actions/chatActions';
 
-const updateDirectChatHistoryIfActive = (data) => {
+export const updateDirectChatHistoryIfActive = (data) => {
   const { participants, messages } = data;
 
-  // find id of user and token and id from active connection
+  // find id of user from token and id from active conversation
   const receiverId = store.getState().chat.chosenChatDetails?.id;
   const userId = store.getState().auth.userDetails._id;
 
   if (receiverId && userId) {
-    const usersInConversation = [receiverId, userId];
+    const usersInCoversation = [receiverId, userId];
 
-    updateDirectChatHistoryIfSameConversationsActive({
+    updateChatHistoryIfSameConversationActive({
       participants,
-      usersInConversation,
+      usersInCoversation,
       messages,
     });
   }
 };
 
-const updateDirectChatHistoryIfSameConversationsActive = ({
+const updateChatHistoryIfSameConversationActive = ({
   participants,
-  usersInConversation,
+  usersInCoversation,
   messages,
 }) => {
   const result = participants.every(function (participantId) {
-    return usersInConversation.includes(participantId);
+    return usersInCoversation.includes(participantId);
   });
 
   if (result) {
     store.dispatch(setMessages(messages));
   }
 };
-
-export { updateDirectChatHistoryIfActive };

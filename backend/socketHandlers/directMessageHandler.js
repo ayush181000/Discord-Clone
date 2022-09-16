@@ -1,11 +1,10 @@
-import Conversation from '../models/Conversation.js';
-import Message from '../models/Message.js';
-import { updateChatHistory } from './updates/chat.js';
+const Message = require('../models/message');
+const Conversation = require('../models/conversation');
+const chatUpdates = require('./updates/chat');
 
 const directMessageHandler = async (socket, data) => {
   try {
     const { userId } = socket.user;
-
     const { receiverUserId, content } = data;
 
     // create new message
@@ -26,20 +25,20 @@ const directMessageHandler = async (socket, data) => {
       await conversation.save();
 
       // perform and update to sender and receiver if is online
-      updateChatHistory(conversation._id.toString());
+      chatUpdates.updateChatHistory(conversation._id.toString());
     } else {
-      // create a new convo
+      // create new conversation if not exists
       const newConversation = await Conversation.create({
         messages: [message._id],
         participants: [userId, receiverUserId],
       });
 
-      // perform and pdate to sender and receiver is online
-      updateChatHistory(newConversation._id.toString());
+      // perform and update to sender and receiver if is online
+      chatUpdates.updateChatHistory(newConversation._id.toString());
     }
   } catch (err) {
     console.log(err);
   }
 };
 
-export default directMessageHandler;
+module.exports = directMessageHandler;

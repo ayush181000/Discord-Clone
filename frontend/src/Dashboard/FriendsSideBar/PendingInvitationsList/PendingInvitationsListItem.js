@@ -9,17 +9,19 @@ const PendingInvitationsListItem = ({
   id,
   username,
   mail,
-  acceptFriendInvitation,
-  rejectFriendInvitation,
+  acceptFriendInvitation = () => {},
+  rejectFriendInvitation = () => {},
 }) => {
   const [buttonsDisabled, setButtonsDisabled] = useState(false);
 
   const handleAcceptInvitation = () => {
+    console.log(id);
     acceptFriendInvitation({ id });
     setButtonsDisabled(true);
   };
 
   const handleRejectInvitation = () => {
+    console.log(id);
     rejectFriendInvitation({ id });
     setButtonsDisabled(true);
   };
@@ -60,10 +62,10 @@ const PendingInvitationsListItem = ({
   );
 };
 
-const mapActionToProps = (dispatch) => {
+const mapActionsToProps = (dispatch) => {
   return {
     ...getActions(dispatch),
   };
 };
 
-export default connect(null, mapActionToProps)(PendingInvitationsListItem);
+export default connect(null, mapActionsToProps)(PendingInvitationsListItem);

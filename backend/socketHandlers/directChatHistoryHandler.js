@@ -1,24 +1,22 @@
-import Conversation from '../models/Conversation.js';
-import Message from '../models/Message.js';
-import { updateChatHistory } from './updates/chat.js';
+const Conversation = require("../models/conversation");
+const chatUpdates = require("./updates/chat");
 
 const directChatHistoryHandler = async (socket, data) => {
   try {
     const { userId } = socket.user;
     const { receiverUserId } = data;
 
-    // find if conversation already exists
     const conversation = await Conversation.findOne({
       participants: { $all: [userId, receiverUserId] },
-      type: 'DIRECT',
+      type: "DIRECT",
     });
 
     if (conversation) {
-      updateChatHistory(conversation._id.toString(), socket.id);
+      chatUpdates.updateChatHistory(conversation._id.toString(), socket.id);
     }
   } catch (err) {
     console.log(err);
   }
 };
 
-export default directChatHistoryHandler;
+module.exports = directChatHistoryHandler;

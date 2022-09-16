@@ -1,18 +1,15 @@
-import mongoose from 'mongoose';
+const mongoose = require("mongoose");
 
-const MessageSchema = new mongoose.Schema({
+const Schema = mongoose.Schema;
+
+const messageSchema = new Schema({
   author: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Message',
+    type: Schema.Types.ObjectId,
+    ref: "User",
   },
   content: { type: String },
   date: { type: Date },
-  type: {
-    type: String,
-    enum: ['GROUP', 'DIRECT'],
-  },
+  type: { type: String },
 });
 
-const Message = mongoose.model('Message', MessageSchema);
-
-export default Message;
+module.exports = mongoose.model("Message", messageSchema);

@@ -13,8 +13,8 @@ const MainContainer = styled('div')({
 
 const Input = styled('input')({
   backgroundColor: '#2f3136',
+  width: '98%',
   height: '44px',
-  width: '97%',
   color: 'white',
   border: 'none',
   borderRadius: '8px',
@@ -25,12 +25,12 @@ const Input = styled('input')({
 const NewMessageInput = ({ chosenChatDetails }) => {
   const [message, setMessage] = useState('');
 
-  const handleMessageValueChange = (e) => {
-    setMessage(e.target.value);
+  const handleMessageValueChange = (event) => {
+    setMessage(event.target.value);
   };
 
-  const handleKeyPressed = (e) => {
-    if (e.key === 'Enter') {
+  const handleKeyPressed = (event) => {
+    if (event.key === 'Enter') {
       handleSendMessage();
     }
   };
@@ -41,8 +41,8 @@ const NewMessageInput = ({ chosenChatDetails }) => {
         receiverUserId: chosenChatDetails.id,
         content: message,
       });
+      setMessage('');
     }
-    setMessage('');
   };
 
   return (

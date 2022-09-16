@@ -1,4 +1,4 @@
-export const chatType = {
+export const chatTypes = {
   DIRECT: 'DIRECT',
   GROUP: 'GROUP',
 };

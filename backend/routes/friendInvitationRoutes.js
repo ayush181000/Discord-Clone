@@ -1,21 +1,12 @@
-import express from 'express';
+const express = require("express");
 const router = express.Router();
-
-// validation
-import Joi from 'joi';
-import expressJoi from 'express-joi-validation';
-const validator = expressJoi.createValidator({});
-
-// middleware
-import { protect } from '../middleware/authMiddleware.js';
-import {
-  postInvite,
-  postAccept,
-  postReject,
-} from '../controllers/friendInvitationsController.js';
+const Joi = require("joi");
+const validator = require("express-joi-validation").createValidator({});
+const auth = require("../middleware/auth");
+const friendInvitationControllers = require("../controllers/friendInvitation/friendInvitationControllers");
 
 const postFriendInvitationSchema = Joi.object({
-  targetMailAddress: Joi.string().email().required(),
+  targetMailAddress: Joi.string().email(),
 });
 
 const inviteDecisionSchema = Joi.object({
@@ -23,24 +14,24 @@ const inviteDecisionSchema = Joi.object({
 });
 
 router.post(
-  '/invite',
-  protect,
+  "/invite",
+  auth,
   validator.body(postFriendInvitationSchema),
-  postInvite
+  friendInvitationControllers.controllers.postInvite
 );
 
 router.post(
-  '/accept',
-  protect,
+  "/accept",
+  auth,
   validator.body(inviteDecisionSchema),
-  postAccept
+  friendInvitationControllers.controllers.postAccept
 );
 
 router.post(
-  '/reject',
-  protect,
+  "/reject",
+  auth,
   validator.body(inviteDecisionSchema),
-  postReject
+  friendInvitationControllers.controllers.postReject
 );
 
-export default router;
+module.exports = router;
